@@ -40,7 +40,6 @@ const GameCircle = ({ color, onClick, isGameActive, shouldShake, shouldPulse }: 
         "w-64 h-64 rounded-full transition-all duration-500 ease-in-out transform",
         "active:scale-95",
         "disabled:cursor-not-allowed disabled:hover:scale-100",
-        "opacity-0 animate-in fade-in duration-500",
         shouldShake && "animate-shake",
         shouldPulse && "animate-success-pulse",
         getColorClass()

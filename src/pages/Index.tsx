@@ -188,11 +188,11 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[hsl(220,15%,18%)] to-[hsl(220,18%,22%)] p-8 relative pb-24">
       {/* Animated 3D Title */}
-      <div className="absolute top-8 left-0 right-0 game-title-bounce">
-        <h1 className="game-title-3d text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-center px-4">
+      <div className="absolute top-8 left-0 right-0 game-title-bounce mb-12">
+        <h1 className="game-title-3d font-orbitron text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-center px-4">
           Green Tap Reflex
         </h1>
-        <p className="text-center text-muted-foreground mt-2 text-xs sm:text-sm animate-fade-in">
+        <p className="text-center text-muted-foreground mt-3 text-xs sm:text-sm animate-fade-in">
           Tap when it turns electric green!
         </p>
       </div>
@@ -308,7 +308,7 @@ const Index = () => {
         </div>
       )}
 
-      <div className="flex flex-col items-center gap-8 max-w-md w-full">
+      <div className="flex flex-col items-center gap-8 max-w-md w-full mt-32">
         {/* Score Display */}
         <div className="text-center relative">
           <h1 className="text-7xl font-extrabold text-foreground mb-2 tracking-tight">

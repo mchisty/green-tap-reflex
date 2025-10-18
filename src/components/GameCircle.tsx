@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 interface GameCircleProps {
-  color: "red" | "blue" | "yellow" | "brown" | "white" | "orange" | "light-green" | "green" | "purple" | "pink" | "cyan" | "magenta" | "lime" | "indigo" | "teal" | "coral" | "default";
+  color: "red" | "blue" | "yellow" | "brown" | "white" | "orange" | "violet" | "green" | "purple" | "pink" | "cyan" | "magenta" | "lime" | "indigo" | "teal" | "coral" | "default";
   onClick: () => void;
   isGameActive: boolean;
   shouldShake?: boolean;
@@ -23,8 +23,8 @@ const GameCircle = ({ color, onClick, isGameActive, shouldShake, shouldPulse }: 
         return "bg-gradient-to-br from-[hsl(0,0%,100%)] to-[hsl(0,0%,85%)] shadow-[0_0_80px_-10px_rgba(255,255,255,0.9),inset_0_-8px_20px_rgba(0,0,0,0.2),inset_0_2px_20px_rgba(255,255,255,0.5)]";
       case "orange":
         return "bg-gradient-to-br from-[hsl(25,95%,70%)] to-[hsl(25,95%,50%)] shadow-[0_0_80px_-10px_rgba(255,138,51,0.9),inset_0_-8px_20px_rgba(0,0,0,0.3),inset_0_2px_20px_rgba(255,255,255,0.3)]";
-      case "light-green":
-        return "bg-gradient-to-br from-[hsl(142,70%,65%)] to-[hsl(142,70%,45%)] shadow-[0_0_80px_-10px_rgba(102,221,119,0.9),inset_0_-8px_20px_rgba(0,0,0,0.3),inset_0_2px_20px_rgba(255,255,255,0.3)]";
+      case "violet":
+        return "bg-gradient-to-br from-[hsl(280,75%,70%)] to-[hsl(280,75%,50%)] shadow-[0_0_80px_-10px_rgba(167,139,250,0.9),inset_0_-8px_20px_rgba(0,0,0,0.3),inset_0_2px_20px_rgba(255,255,255,0.3)]";
       case "green":
         return "bg-gradient-to-br from-[hsl(142,85%,55%)] to-[hsl(142,85%,35%)] shadow-[0_0_80px_-10px_rgba(16,223,94,1),inset_0_-8px_20px_rgba(0,0,0,0.4),inset_0_2px_20px_rgba(255,255,255,0.4)] animate-pulse-glow";
       case "purple":

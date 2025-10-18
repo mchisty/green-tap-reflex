@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 
-type GameColor = "red" | "blue" | "yellow" | "brown" | "white" | "orange" | "light-green" | "green" | "purple" | "pink" | "cyan" | "magenta" | "lime" | "indigo" | "teal" | "coral" | "default";
+type GameColor = "red" | "blue" | "yellow" | "brown" | "white" | "orange" | "violet" | "green" | "purple" | "pink" | "cyan" | "magenta" | "lime" | "indigo" | "teal" | "coral" | "default";
 
 const Index = () => {
   const [score, setScore] = useState(0);
@@ -36,7 +36,7 @@ const Index = () => {
   const gameOverCountRef = useRef(0);
 
   const generateColorSequence = useCallback(() => {
-    const colors: GameColor[] = ["red", "blue", "yellow", "brown", "white", "orange", "light-green", "purple", "pink", "cyan", "magenta", "lime", "indigo", "teal", "coral"];
+    const colors: GameColor[] = ["red", "blue", "yellow", "brown", "white", "orange", "violet", "purple", "pink", "cyan", "magenta", "lime", "indigo", "teal", "coral"];
     // Shuffle and pick 3 random colors
     const shuffled = colors.sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, 3);

@@ -17,7 +17,7 @@ Your game is now configured for Android with AdMob ads and in-app purchases! Fol
 2. Clone your repository locally:
    ```bash
    git clone <your-repo-url>
-   cd green-tap-blast
+   cd green-tap-reflex
    ```
 
 ### 2. Install Dependencies
@@ -34,7 +34,7 @@ npx cap init
 
 When prompted, use these values:
 - App ID: `app.lovable.82eb1283ea384630b4a56cc059290223`
-- App Name: `green-tap-blast`
+- App Name: `Green Tap Reflex`
 
 ### 4. Add Android Platform
 

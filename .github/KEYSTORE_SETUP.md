@@ -5,9 +5,9 @@
 First, create your keystore file locally:
 
 ```bash
-keytool -genkey -v -keystore green-tap-blast-keystore.jks \
+keytool -genkey -v -keystore green-tap-reflex-keystore.jks \
   -keyalg RSA -keysize 2048 -validity 10000 \
-  -alias green-tap-blast
+  -alias green-tap-reflex
 ```
 
 Fill in the information when prompted:
@@ -18,7 +18,7 @@ Fill in the information when prompted:
 ## Step 2: Convert Keystore to Base64
 
 ```bash
-base64 green-tap-blast-keystore.jks > keystore-base64.txt
+base64 green-tap-reflex-keystore.jks > keystore-base64.txt
 ```
 
 ## Step 3: Add Secrets to GitHub
@@ -34,7 +34,7 @@ Add these secrets:
    - The keystore password you created
 
 3. **KEY_ALIAS**
-   - Value: `green-tap-blast`
+   - Value: `green-tap-reflex`
 
 4. **KEY_PASSWORD**
    - The key password (usually same as keystore password)

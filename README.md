@@ -1,73 +1,102 @@
-# Welcome to your Lovable project
+# Green Tap Reflex
 
-## Project info
+A fast-paced mobile reflex game built with React, TypeScript, and Capacitor. Test your reflexes by tapping the circle only when it turns electric green!
+
+## Project Info
 
 **URL**: https://lovable.dev/projects/82eb1283-ea38-4630-b4a5-6cc059290223
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- 🎯 Test your reflexes with color-changing circles
+- 🎨 16 vibrant colors with 3D effects
+- 🔊 Dynamic sound effects (tap, success, game over)
+- 📱 Native Android app with AdMob integration
+- 💰 In-app purchase to remove ads
+- ⚙️ Customizable settings (sound, speed)
+- 🏆 High score tracking
+- 📋 Help menu with game instructions
 
-**Use Lovable**
+## How to Play
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/82eb1283-ea38-4630-b4a5-6cc059290223) and start prompting.
+1. Wait for the circle to turn **electric green**
+2. Tap it as quickly as possible!
+3. Tapping any other color ends the game
+4. Beat your high score!
 
-Changes made via Lovable will be committed automatically to this repo.
+## Development
 
-**Use your preferred IDE**
+### Prerequisites
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Node.js & npm - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- For Android: Android Studio and Java 17
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Local Setup
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone the repository
 git clone <YOUR_GIT_URL>
+cd green-tap-reflex
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Mobile Development
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+For Android app development:
 
-**Use GitHub Codespaces**
+```sh
+# Build web assets
+npm run build
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Add Android platform (first time only)
+npx cap add android
 
-## What technologies are used for this project?
+# Sync changes to Android
+npx cap sync android
 
-This project is built with:
+# Open in Android Studio
+npx cap open android
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+See [MOBILE_SETUP.md](./MOBILE_SETUP.md) for detailed mobile setup instructions.
 
-## How can I deploy this project?
+## Technologies
 
-Simply open [Lovable](https://lovable.dev/projects/82eb1283-ea38-4630-b4a5-6cc059290223) and click on Share -> Publish.
+- **Frontend**: React, TypeScript, Vite
+- **UI**: Tailwind CSS, shadcn-ui
+- **Mobile**: Capacitor
+- **Monetization**: AdMob, In-App Purchases
+- **Storage**: Capacitor Preferences
 
-## Can I connect a custom domain to my Lovable project?
+## Deployment
 
-Yes, you can!
+### Web Deployment
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Simply open [Lovable](https://lovable.dev/projects/82eb1283-ea38-4630-b4a5-6cc059290223) and click Share → Publish.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Android Release
+
+See [GITHUB_EXPORT.md](./GITHUB_EXPORT.md) for instructions on building and publishing to Google Play Store.
+
+You can also use GitHub Actions to automatically build AAB files - see [.github/KEYSTORE_SETUP.md](./.github/KEYSTORE_SETUP.md).
+
+## Custom Domain
+
+To connect a custom domain, navigate to Project > Settings > Domains in Lovable.
+
+Read more: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain)
+
+## Documentation
+
+- [Mobile Setup Guide](./MOBILE_SETUP.md) - Complete Android setup instructions
+- [GitHub Export Guide](./GITHUB_EXPORT.md) - Publishing to Play Store
+- [Keystore Setup](./KEYSTORE_SETUP.md) - GitHub Actions for automated builds
+
+## Support
+
+For issues or questions, visit the [Lovable Discord community](https://discord.gg/lovable).

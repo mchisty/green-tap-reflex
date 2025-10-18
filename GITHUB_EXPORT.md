@@ -1,6 +1,6 @@
-# GitHub Export Guide for Green Tap Blast
+# GitHub Export Guide for Green Tap Reflex
 
-This guide will help you export your Green Tap Blast project to GitHub for version control and deployment.
+This guide will help you export your Green Tap Reflex project to GitHub for version control and deployment.
 
 ## Prerequisites
 
@@ -115,7 +115,7 @@ In Android Studio:
 1. Go to [Google Play Console](https://play.google.com/console)
 2. Create a new app
 3. Fill in all required information:
-   - App name: Green Tap Blast
+   - App name: Green Tap Reflex
    - Category: Casual Games
    - Upload screenshots (take from your app)
    - Upload your app icon (`public/icon-512.png`)

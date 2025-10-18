@@ -1,6 +1,6 @@
 {
-  "name": "Green Tap Blast",
-  "short_name": "Green Tap",
+  "name": "Green Tap Reflex",
+  "short_name": "TapReflex",
   "description": "Tap the circle when it turns electric green!",
   "start_url": "/",
   "display": "standalone",

@@ -4,7 +4,9 @@ import GameCircle from "@/components/GameCircle";
 import ScorePopup from "@/components/ScorePopup";
 import { toast } from "sonner";
 import { useGameSounds } from "@/hooks/useGameSounds";
-import { Volume2, VolumeX } from "lucide-react";
+import { useAdMob } from "@/hooks/useAdMob";
+import { useInAppPurchase } from "@/hooks/useInAppPurchase";
+import { Volume2, VolumeX, ShoppingCart, RefreshCw } from "lucide-react";
 
 type GameColor = "red" | "blue" | "yellow" | "brown" | "white" | "orange" | "light-green" | "green" | "default";
 
@@ -24,6 +26,10 @@ const Index = () => {
   const colorsRef = useRef<GameColor[]>([]);
   
   const { playSuccessSound, playErrorSound, toggleMute, isMuted } = useGameSounds();
+  const { showBanner, removeBanner, prepareInterstitial, showInterstitial, interstitialReady } = useAdMob();
+  const { adsRemoved, loading: purchaseLoading, purchaseRemoveAds, restorePurchases } = useInAppPurchase();
+  
+  const gameOverCountRef = useRef(0);
 
   const generateColorSequence = useCallback(() => {
     const colors: GameColor[] = ["red", "blue", "yellow", "brown", "white", "orange", "light-green"];
@@ -49,7 +55,17 @@ const Index = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
     if (greenTimerRef.current) clearTimeout(greenTimerRef.current);
     toast.error(message);
-  }, [playErrorSound]);
+    
+    // Show interstitial ad every 3 game overs (if ads not removed)
+    if (!adsRemoved) {
+      gameOverCountRef.current++;
+      if (gameOverCountRef.current % 3 === 0 && interstitialReady) {
+        setTimeout(() => {
+          showInterstitial();
+        }, 1000);
+      }
+    }
+  }, [playErrorSound, adsRemoved, interstitialReady, showInterstitial]);
 
   const changeColor = useCallback(() => {
     if (colorIndexRef.current >= colorsRef.current.length) {
@@ -124,6 +140,16 @@ const Index = () => {
     }
   };
 
+  // Initialize ads
+  useEffect(() => {
+    if (!adsRemoved) {
+      showBanner();
+      prepareInterstitial();
+    } else {
+      removeBanner();
+    }
+  }, [adsRemoved, showBanner, prepareInterstitial, removeBanner]);
+
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -131,20 +157,69 @@ const Index = () => {
     };
   }, []);
 
+  const handlePurchase = async () => {
+    const result = await purchaseRemoveAds();
+    if (result.success) {
+      toast.success("Ads removed successfully!");
+      removeBanner();
+    } else {
+      toast.error("Purchase failed. Please try again.");
+    }
+  };
+
+  const handleRestore = async () => {
+    const result = await restorePurchases();
+    if (result.success) {
+      if (adsRemoved) {
+        toast.success("Purchase restored!");
+        removeBanner();
+      } else {
+        toast.info("No purchases to restore.");
+      }
+    } else {
+      toast.error("Restore failed. Please try again.");
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[hsl(220,15%,18%)] to-[hsl(220,18%,22%)] p-8 relative">
-      {/* Mute Toggle Button */}
-      <button
-        onClick={toggleMute}
-        className="absolute top-6 right-6 p-3 rounded-full bg-secondary/50 hover:bg-secondary/70 transition-colors"
-        aria-label={isMuted ? "Unmute sounds" : "Mute sounds"}
-      >
-        {isMuted ? (
-          <VolumeX className="w-6 h-6 text-foreground" />
-        ) : (
-          <Volume2 className="w-6 h-6 text-foreground" />
-        )}
-      </button>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[hsl(220,15%,18%)] to-[hsl(220,18%,22%)] p-8 relative pb-24">
+      {/* Top Controls */}
+      <div className="absolute top-6 right-6 flex gap-2">
+        <button
+          onClick={toggleMute}
+          className="p-3 rounded-full bg-secondary/50 hover:bg-secondary/70 transition-colors"
+          aria-label={isMuted ? "Unmute sounds" : "Mute sounds"}
+        >
+          {isMuted ? (
+            <VolumeX className="w-6 h-6 text-foreground" />
+          ) : (
+            <Volume2 className="w-6 h-6 text-foreground" />
+          )}
+        </button>
+      </div>
+
+      {/* Purchase Buttons - Only show if ads not removed */}
+      {!adsRemoved && !purchaseLoading && (
+        <div className="absolute top-6 left-6 flex flex-col gap-2">
+          <Button
+            onClick={handlePurchase}
+            variant="secondary"
+            size="sm"
+            className="button-3d"
+          >
+            <ShoppingCart className="w-4 h-4 mr-2" />
+            Remove Ads
+          </Button>
+          <Button
+            onClick={handleRestore}
+            variant="ghost"
+            size="sm"
+          >
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Restore
+          </Button>
+        </div>
+      )}
 
       <div className="flex flex-col items-center gap-8 max-w-md w-full">
         {/* Score Display */}

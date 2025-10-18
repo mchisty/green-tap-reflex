@@ -6,9 +6,12 @@ import { toast } from "sonner";
 import { useGameSounds } from "@/hooks/useGameSounds";
 import { useAdMob } from "@/hooks/useAdMob";
 import { useInAppPurchase } from "@/hooks/useInAppPurchase";
-import { Volume2, VolumeX, ShoppingCart, RefreshCw } from "lucide-react";
+import { Volume2, VolumeX, ShoppingCart, RefreshCw, HelpCircle, Settings } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 
-type GameColor = "red" | "blue" | "yellow" | "brown" | "white" | "orange" | "light-green" | "green" | "default";
+type GameColor = "red" | "blue" | "yellow" | "brown" | "white" | "orange" | "light-green" | "green" | "purple" | "pink" | "cyan" | "magenta" | "lime" | "indigo" | "teal" | "coral" | "default";
 
 const Index = () => {
   const [score, setScore] = useState(0);
@@ -16,6 +19,7 @@ const Index = () => {
   const [currentColor, setCurrentColor] = useState<GameColor>("default");
   const [isGameOver, setIsGameOver] = useState(false);
   const [colorChangeInterval, setColorChangeInterval] = useState(2000);
+  const [baseSpeed, setBaseSpeed] = useState(2000);
   const [shouldShake, setShouldShake] = useState(false);
   const [shouldPulse, setShouldPulse] = useState(false);
   const [showScorePopup, setShowScorePopup] = useState(false);
@@ -32,7 +36,7 @@ const Index = () => {
   const gameOverCountRef = useRef(0);
 
   const generateColorSequence = useCallback(() => {
-    const colors: GameColor[] = ["red", "blue", "yellow", "brown", "white", "orange", "light-green"];
+    const colors: GameColor[] = ["red", "blue", "yellow", "brown", "white", "orange", "light-green", "purple", "pink", "cyan", "magenta", "lime", "indigo", "teal", "coral"];
     // Shuffle and pick 3 random colors
     const shuffled = colors.sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, 3);
@@ -96,7 +100,7 @@ const Index = () => {
     setCurrentColor("default");
     setShouldShake(false);
     setShouldPulse(false);
-    setColorChangeInterval(2000);
+    setColorChangeInterval(baseSpeed);
     colorIndexRef.current = 0;
     colorsRef.current = generateColorSequence();
     
@@ -196,6 +200,79 @@ const Index = () => {
             <Volume2 className="w-6 h-6 text-foreground" />
           )}
         </button>
+        
+        {/* Help Dialog */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <button
+              className="p-3 rounded-full bg-secondary/50 hover:bg-secondary/70 transition-colors"
+              aria-label="Help"
+            >
+              <HelpCircle className="w-6 h-6 text-foreground" />
+            </button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>How to Play</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 text-sm text-muted-foreground">
+              <p><strong className="text-foreground">Objective:</strong> Tap the circle only when it turns <span className="text-[hsl(142,85%,45%)] font-bold">ELECTRIC GREEN</span>!</p>
+              <p><strong className="text-foreground">Gameplay:</strong> The circle will change through different colors. Watch carefully and tap only when it becomes electric green.</p>
+              <p><strong className="text-foreground">Time Limit:</strong> You have only 1.5 seconds to tap when the circle turns green.</p>
+              <p><strong className="text-foreground">Difficulty:</strong> The game speeds up every 5 points.</p>
+              <p><strong className="text-foreground">Game Over:</strong> Tapping the wrong color or being too slow ends the game.</p>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Settings Dialog */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <button
+              className="p-3 rounded-full bg-secondary/50 hover:bg-secondary/70 transition-colors"
+              aria-label="Settings"
+            >
+              <Settings className="w-6 h-6 text-foreground" />
+            </button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Game Settings</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label>Sound Effects</Label>
+                  <button
+                    onClick={toggleMute}
+                    className="px-4 py-2 rounded-md bg-secondary hover:bg-secondary/80 transition-colors text-sm"
+                  >
+                    {isMuted ? "Disabled" : "Enabled"}
+                  </button>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>Starting Speed</Label>
+                  <span className="text-sm text-muted-foreground">{baseSpeed}ms</span>
+                </div>
+                <Slider
+                  value={[baseSpeed]}
+                  onValueChange={(values) => setBaseSpeed(values[0])}
+                  min={500}
+                  max={3000}
+                  step={100}
+                  className="w-full"
+                  disabled={isGameActive}
+                />
+                <p className="text-xs text-muted-foreground">
+                  {isGameActive ? "Cannot change speed during game" : "Lower = Faster (500ms - 3000ms)"}
+                </p>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Purchase Buttons - Only show if ads not removed */}

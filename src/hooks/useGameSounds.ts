@@ -41,15 +41,16 @@ export const useGameSounds = () => {
     oscillator.connect(gainNode);
     gainNode.connect(ctx.destination);
 
-    oscillator.frequency.setValueAtTime(400, ctx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.3);
+    // Soft, descending tones - more soothing
+    oscillator.frequency.setValueAtTime(500, ctx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.4);
     
-    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
 
-    oscillator.type = "sawtooth";
+    oscillator.type = "sine"; // Softer sine wave instead of harsh sawtooth
     oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + 0.3);
+    oscillator.stop(ctx.currentTime + 0.4);
   }, [isMuted]);
 
   const toggleMute = useCallback(() => {

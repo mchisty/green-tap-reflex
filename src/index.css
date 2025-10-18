@@ -46,6 +46,14 @@ All colors MUST be HSL.
     --game-orange: 25 95% 60%;
     --game-light-green: 142 70% 55%;
     --game-electric-green: 142 85% 45%;
+    --game-purple: 270 75% 60%;
+    --game-pink: 330 85% 65%;
+    --game-cyan: 180 85% 55%;
+    --game-magenta: 300 80% 60%;
+    --game-lime: 75 85% 55%;
+    --game-indigo: 240 80% 65%;
+    --game-teal: 175 70% 50%;
+    --game-coral: 15 90% 65%;
     
     --gradient-bg: linear-gradient(135deg, hsl(220, 15%, 18%) 0%, hsl(220, 18%, 22%) 100%);
     --shadow-glow: 0 0 80px -10px;

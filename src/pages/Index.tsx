@@ -187,8 +187,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[hsl(220,15%,18%)] to-[hsl(220,18%,22%)] p-8 relative pb-24">
+      {/* Animated 3D Title */}
+      <div className="absolute top-8 left-0 right-0 game-title-bounce">
+        <h1 className="game-title-3d text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-center px-4">
+          Green Tap Reflex
+        </h1>
+        <p className="text-center text-muted-foreground mt-2 text-xs sm:text-sm animate-fade-in">
+          Tap when it turns electric green!
+        </p>
+      </div>
+
       {/* Top Controls */}
-      <div className="absolute top-6 right-6 flex gap-2">
+      <div className="absolute top-6 right-6 flex gap-2 z-10">
         <button
           onClick={toggleMute}
           className="p-3 rounded-full bg-secondary/50 hover:bg-secondary/70 transition-colors"
@@ -277,7 +287,7 @@ const Index = () => {
 
       {/* Purchase Buttons - Only show if ads not removed */}
       {!adsRemoved && !purchaseLoading && (
-        <div className="absolute top-6 left-6 flex flex-col gap-2">
+        <div className="absolute top-6 left-6 flex flex-col gap-2 z-10">
           <Button
             onClick={handlePurchase}
             variant="secondary"

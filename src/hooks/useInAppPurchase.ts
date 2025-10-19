@@ -5,6 +5,10 @@ import { Capacitor } from '@capacitor/core';
 const PURCHASE_KEY = 'ads_removed';
 const PRODUCT_ID = 'remove_ads';
 
+// SECURITY WARNING: This is a client-side only implementation
+// It can be bypassed by modifying local storage
+// For production, you MUST implement server-side receipt validation
+
 export const useInAppPurchase = () => {
   const [adsRemoved, setAdsRemoved] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -32,11 +36,10 @@ export const useInAppPurchase = () => {
       return { success: true };
     }
 
-    // In production, integrate with Google Play Billing here
-    // For now, we'll use local storage to track the purchase
+    // WARNING: This implementation is insecure and can be bypassed
+    // For production, integrate Google Play Billing with server-side validation
     try {
       // TODO: Implement actual Google Play Billing integration
-      // This is a placeholder that simulates a successful purchase
       await Preferences.set({ key: PURCHASE_KEY, value: 'true' });
       setAdsRemoved(true);
       return { success: true };
@@ -52,9 +55,8 @@ export const useInAppPurchase = () => {
       return { success: true };
     }
 
-    // In production, restore purchases from Google Play Billing
+    // WARNING: This doesn't actually restore from Google Play
     try {
-      // TODO: Implement actual Google Play Billing restore
       await checkPurchaseStatus();
       return { success: true };
     } catch (error) {

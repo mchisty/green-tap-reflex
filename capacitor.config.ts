@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/core';
 
 const config: CapacitorConfig = {
-  appId: 'com.lovable.greentapreflex',
+  appId: 'com.mchisty.greentapreflex',
   appName: 'Green Tap Reflex',
   webDir: 'dist',
   server: {

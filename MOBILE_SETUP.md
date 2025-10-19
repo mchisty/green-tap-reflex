@@ -4,10 +4,14 @@ Your game is now configured for Android with AdMob ads and in-app purchases! Fol
 
 ## 📱 Prerequisites
 
-1. Install [Android Studio](https://developer.android.com/studio)
-2. Install [Node.js](https://nodejs.org/) (v16 or higher)
-3. Have a [Google AdMob account](https://admob.google.com/)
-4. Have a [Google Play Console account](https://play.google.com/console/) (for production IAP)
+### Required
+1. Install [Node.js](https://nodejs.org/) (v16 or higher)
+2. Have a [Google AdMob account](https://admob.google.com/)
+3. Have a [Google Play Console account](https://play.google.com/console/) (for production IAP)
+
+### Optional (Choose One)
+- **Option A (Lightweight)**: [Android Command Line Tools](https://developer.android.com/studio#command-tools) - Use GitHub Actions for builds
+- **Option B (Full IDE)**: [Android Studio](https://developer.android.com/studio) - For local development and testing
 
 ## 🚀 Initial Setup
 
@@ -358,13 +362,7 @@ useEffect(() => {
 
 ## 🧪 Testing
 
-### Run on Emulator
-
-```bash
-npx cap run android
-```
-
-### Run on Physical Device
+### Run on Physical Device (Recommended for Low-Spec Machines)
 
 1. Enable Developer Options on your Android device
 2. Enable USB Debugging
@@ -373,6 +371,14 @@ npx cap run android
    ```bash
    npx cap run android
    ```
+
+**Tip**: Testing on a physical device is lighter on resources than running emulators and gives more accurate results!
+
+### Run on Emulator (Requires Android Studio or Command Line Tools)
+
+```bash
+npx cap run android
+```
 
 ### Test Ads
 
@@ -405,15 +411,32 @@ npx cap run android
    }
    ```
 
-### 2. Build Release APK
+### 2. Build Release Bundle
+
+#### Option A: Using GitHub Actions (Recommended for Low-Spec Machines)
+
+Your project already has automated builds set up! Just push to GitHub:
+
+```bash
+git add .
+git commit -m "Ready for production build"
+git push origin main
+```
+
+Then:
+1. Go to your GitHub repository
+2. Click **Actions** tab
+3. Find the latest **Build Android App Bundle** workflow
+4. Once complete, download the `app-release.aab` artifact
+5. Upload the AAB to Google Play Console
+
+**Note**: You'll need to set up secrets in GitHub (see `.github/KEYSTORE_SETUP.md` for details)
+
+#### Option B: Using Android Studio (Requires More Resources)
 
 ```bash
 npm run build
 npx cap sync android
-```
-
-Open Android Studio:
-```bash
 npx cap open android
 ```
 
@@ -421,6 +444,23 @@ In Android Studio:
 1. **Build** → **Generate Signed Bundle / APK**
 2. Follow wizard to create keystore and sign APK
 3. Upload to Google Play Console
+
+#### Option C: Command Line Only (Lightweight)
+
+If you have Android command line tools installed:
+
+```bash
+npm run build
+npx cap sync android
+cd android
+./gradlew bundleRelease \
+  -Pandroid.injected.signing.store.file=YOUR_KEYSTORE.jks \
+  -Pandroid.injected.signing.store.password=YOUR_STORE_PASSWORD \
+  -Pandroid.injected.signing.key.alias=YOUR_KEY_ALIAS \
+  -Pandroid.injected.signing.key.password=YOUR_KEY_PASSWORD
+```
+
+The AAB will be at: `android/app/build/outputs/bundle/release/app-release.aab`
 
 ## 🔄 Development Workflow
 

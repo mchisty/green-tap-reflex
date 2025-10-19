@@ -87,24 +87,274 @@ const INTERSTITIAL_AD_ID = 'ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ';
 
 ## 💰 Configure In-App Purchases (Google Play Billing)
 
+**IMPORTANT**: The current implementation is a placeholder that uses local storage. For production, you MUST implement real Google Play Billing with server-side receipt validation.
+
 ### 1. Create In-App Product in Play Console
 
 1. Go to [Google Play Console](https://play.google.com/console/)
-2. Select your app (or create new app)
-3. Go to **Monetize** → **In-app products**
-4. Create new product:
-   - Product ID: `remove_ads`
-   - Type: Non-consumable
-   - Price: Set your price
+2. Select your app (or create new app if first time)
+3. Navigate to **Monetize** → **In-app products**
+4. Click **Create product**
+5. Configure the product:
+   - **Product ID**: `remove_ads` (must match PRODUCT_ID in code)
+   - **Type**: Non-consumable (one-time purchase)
+   - **Name**: Remove Ads
+   - **Description**: Remove all advertisements from the game
+   - **Price**: Set your desired price (e.g., $2.99)
+6. Click **Save** and then **Activate**
 
-### 2. Integrate Google Play Billing
+### 2. Install Google Play Billing Plugin
 
-For production, you'll need to integrate the actual billing library. The current implementation uses local storage for testing.
+Install the Capacitor Purchases plugin:
 
-To implement real billing:
-1. Install billing plugin: `npm install @capawesome/capacitor-purchases`
-2. Update `src/hooks/useInAppPurchase.ts` to use the billing plugin
-3. Follow [Capacitor Purchases docs](https://github.com/capawesome-team/capacitor-plugins)
+```bash
+npm install @capawesome/capacitor-purchases
+npx cap sync android
+```
+
+### 3. Update useInAppPurchase Hook
+
+Replace `src/hooks/useInAppPurchase.ts` with this production-ready implementation:
+
+```typescript
+import { useState, useEffect } from 'react';
+import { Preferences } from '@capacitor/preferences';
+import { Capacitor } from '@capacitor/core';
+import { Purchases } from '@capawesome/capacitor-purchases';
+
+const PURCHASE_KEY = 'ads_removed';
+const PRODUCT_ID = 'remove_ads';
+
+export const useInAppPurchase = () => {
+  const [adsRemoved, setAdsRemoved] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    initializeBilling();
+  }, []);
+
+  const initializeBilling = async () => {
+    if (!Capacitor.isNativePlatform()) {
+      await checkPurchaseStatus();
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Initialize the billing library
+      await Purchases.initialize();
+      
+      // Check if user already owns the product
+      const { purchases } = await Purchases.getPurchases();
+      const hasRemoveAds = purchases.some(p => p.productId === PRODUCT_ID);
+      
+      if (hasRemoveAds) {
+        await Preferences.set({ key: PURCHASE_KEY, value: 'true' });
+        setAdsRemoved(true);
+      }
+    } catch (error) {
+      console.error('Failed to initialize billing:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const checkPurchaseStatus = async () => {
+    try {
+      const { value } = await Preferences.get({ key: PURCHASE_KEY });
+      setAdsRemoved(value === 'true');
+    } catch (error) {
+      console.error('Failed to check purchase status:', error);
+    }
+  };
+
+  const purchaseRemoveAds = async () => {
+    if (!Capacitor.isNativePlatform()) {
+      // Web testing mode
+      await Preferences.set({ key: PURCHASE_KEY, value: 'true' });
+      setAdsRemoved(true);
+      return { success: true };
+    }
+
+    try {
+      // Start the purchase flow
+      const result = await Purchases.purchaseProduct({ productId: PRODUCT_ID });
+      
+      // Verify the purchase with your backend
+      const verified = await verifyPurchaseWithBackend(result.purchaseToken);
+      
+      if (verified) {
+        await Preferences.set({ key: PURCHASE_KEY, value: 'true' });
+        setAdsRemoved(true);
+        return { success: true };
+      } else {
+        return { success: false, error: 'Purchase verification failed' };
+      }
+    } catch (error) {
+      console.error('Purchase failed:', error);
+      return { success: false, error };
+    }
+  };
+
+  const restorePurchases = async () => {
+    if (!Capacitor.isNativePlatform()) {
+      await checkPurchaseStatus();
+      return { success: true };
+    }
+
+    try {
+      const { purchases } = await Purchases.getPurchases();
+      const hasRemoveAds = purchases.some(p => p.productId === PRODUCT_ID);
+      
+      if (hasRemoveAds) {
+        await Preferences.set({ key: PURCHASE_KEY, value: 'true' });
+        setAdsRemoved(true);
+      }
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Restore failed:', error);
+      return { success: false, error };
+    }
+  };
+
+  return {
+    adsRemoved,
+    loading,
+    purchaseRemoveAds,
+    restorePurchases,
+  };
+};
+
+// Backend verification function
+async function verifyPurchaseWithBackend(purchaseToken: string): Promise<boolean> {
+  try {
+    // Call your Lovable Cloud Edge Function for server-side validation
+    const response = await fetch('YOUR_EDGE_FUNCTION_URL/verify-purchase', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        purchaseToken,
+        productId: PRODUCT_ID,
+      }),
+    });
+    
+    const data = await response.json();
+    return data.verified === true;
+  } catch (error) {
+    console.error('Verification request failed:', error);
+    return false;
+  }
+}
+```
+
+### 4. Set Up Server-Side Receipt Validation (CRITICAL for Security)
+
+**⚠️ SECURITY REQUIREMENT**: Client-side purchases can be bypassed. You MUST validate receipts server-side.
+
+#### Option A: Using Lovable Cloud (Recommended)
+
+1. **Enable Lovable Cloud** in your project
+2. **Add Google Play Developer API credentials** as secrets
+3. **Create Edge Function** for receipt validation:
+
+Create `supabase/functions/verify-purchase/index.ts`:
+
+```typescript
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+
+const GOOGLE_PLAY_DEVELOPER_API = 'YOUR_API_KEY_FROM_SECRETS';
+
+serve(async (req) => {
+  try {
+    const { purchaseToken, productId } = await req.json();
+
+    // Call Google Play Developer API to verify the purchase
+    const verifyUrl = `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/YOUR_PACKAGE_NAME/purchases/products/${productId}/tokens/${purchaseToken}`;
+    
+    const response = await fetch(verifyUrl, {
+      headers: {
+        'Authorization': `Bearer ${GOOGLE_PLAY_DEVELOPER_API}`,
+      },
+    });
+
+    const data = await response.json();
+    
+    // Check if purchase is valid
+    const verified = data.purchaseState === 0; // 0 = purchased
+    
+    return new Response(
+      JSON.stringify({ verified }),
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ verified: false, error: error.message }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+});
+```
+
+4. **Deploy the Edge Function**
+5. **Update the verification URL** in `useInAppPurchase.ts`
+
+#### Option B: Using External Backend
+
+If you have your own backend server:
+1. Create an endpoint that accepts purchase tokens
+2. Use Google Play Developer API to verify the receipt
+3. Return verification status to your app
+4. Update the `verifyPurchaseWithBackend` function with your endpoint URL
+
+### 5. Configure Google Play Developer API
+
+To enable server-side verification:
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing
+3. Enable **Google Play Android Developer API**
+4. Create credentials (Service Account)
+5. Download the JSON key file
+6. Go to [Google Play Console](https://play.google.com/console/)
+7. Navigate to **Settings** → **API access**
+8. Link your Google Cloud project
+9. Grant access to the service account
+10. Store the credentials securely in Lovable Cloud Secrets
+
+### 6. Testing In-App Purchases
+
+#### Set Up Test Accounts
+
+1. Go to [Google Play Console](https://play.google.com/console/)
+2. Navigate to **Settings** → **License testing**
+3. Add test Gmail accounts (email addresses)
+4. These accounts can make test purchases without being charged
+
+#### Testing Flow
+
+1. **Build and install** your app on a device with a test account
+2. **Sign in** to Google Play with the test account
+3. **Trigger purchase flow** in your app
+4. **Complete test purchase** (no actual charge)
+5. **Verify** ads are removed
+6. **Test restore** by uninstalling and reinstalling the app
+7. **Click "Restore Purchases"** to verify restoration works
+
+#### Debug Purchases
+
+Enable logging to debug purchase issues:
+
+```typescript
+// Add to your useInAppPurchase hook
+useEffect(() => {
+  if (__DEV__) {
+    Purchases.addListener('purchaseUpdated', (result) => {
+      console.log('Purchase updated:', result);
+    });
+  }
+}, []);
+```
 
 ## 🧪 Testing
 

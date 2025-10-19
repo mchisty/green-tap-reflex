@@ -89,15 +89,283 @@ const INTERSTITIAL_AD_ID = 'ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ';
     android:value="ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY"/>
 ```
 
+## 📲 Create App in Google Play Console
+
+Before you can publish or configure in-app purchases, you need to create your app in Google Play Console. This is a detailed process that requires careful attention.
+
+### Prerequisites for Play Console
+
+1. **Google Play Developer Account** ($25 one-time registration fee)
+   - Go to [Google Play Console](https://play.google.com/console/)
+   - Sign up with your Google account
+   - Pay the one-time registration fee
+   - Complete identity verification (may take 24-48 hours)
+
+2. **Required Assets Ready**
+   - App icon (512x512 PNG, no transparency)
+   - Feature graphic (1024x500 PNG or JPG)
+   - At least 2 screenshots (phone: 16:9 or 9:16 aspect ratio)
+   - Privacy policy URL (required for all apps)
+   - App description and promotional text
+
+### Step 1: Create a New App
+
+1. **Go to Play Console Dashboard**
+   - Visit [Google Play Console](https://play.google.com/console/)
+   - Click **"Create app"** button (top right)
+
+2. **Fill in App Details**
+   - **App name**: `Green Tap Reflex` (max 50 characters)
+     - This is the name users will see on Google Play
+     - Can be changed later but may affect ASO (App Store Optimization)
+   - **Default language**: Choose your primary language (e.g., English - United States)
+   - **App or game**: Select **"Game"**
+   - **Free or paid**: Select **"Free"** (apps with in-app purchases must be free)
+
+3. **Declarations** (Critical - Read Carefully!)
+   - ✅ Check: "I declare that this app complies with Google Play's Developer Program Policies"
+   - ✅ Check: "I acknowledge that this app is subject to US export laws"
+   - Click **"Create app"**
+
+### Step 2: Set Up Store Listing
+
+After creating the app, you'll be taken to the dashboard. Complete these required sections:
+
+#### 2.1 Store Listing (Required)
+
+Navigate to **Grow** → **Store presence** → **Main store listing**
+
+**App Details:**
+- **App name**: `Green Tap Reflex` (pre-filled)
+- **Short description**: (Max 80 characters)
+  ```
+  Test your reflexes! Tap the green circle before time runs out. Beat your best!
+  ```
+- **Full description**: (Max 4000 characters)
+  ```
+  🎯 Green Tap Reflex - The Ultimate Reaction Speed Challenge!
+
+  How fast are your reflexes? Put yourself to the test with Green Tap Reflex, the addictive game that challenges you to tap green circles before time runs out!
+
+  🎮 GAMEPLAY
+  • Tap the green circle as quickly as possible
+  • Each successful tap increases your score
+  • Miss the green circle and the game is over
+  • Circles appear faster as you progress
+  • Beat your high score with each attempt
+
+  ✨ FEATURES
+  • Simple one-tap gameplay
+  • Progressive difficulty that keeps you on your toes
+  • Track your best scores
+  • Clean, minimalist design
+  • Smooth animations and responsive controls
+  • Sound effects and haptic feedback
+  • Option to remove ads with one-time purchase
+
+  Perfect for:
+  • Quick gaming sessions
+  • Improving hand-eye coordination
+  • Competing with friends
+  • Killing time during commutes
+
+  Download now and see how high you can score! Can you beat your friends' reflexes?
+  ```
+
+**Graphics:**
+- **App icon**: 512x512 PNG (use your existing `public/icon-512.png`)
+- **Feature graphic**: 1024x500 (create one or use a solid color with app name)
+- **Phone screenshots**: Upload at least 2 screenshots (required)
+  - Take screenshots from your emulator or device
+  - Use Android Studio's screenshot tool or `adb screencap`
+  - Best practice: 4-8 screenshots showing gameplay
+
+**Categorization:**
+- **App category**: Games → Arcade
+- **Tags** (optional): action, arcade, casual, reflexes, tapping
+
+**Contact Details:**
+- **Email**: Your support email (must be valid, users can contact you)
+- **Website**: Optional (your website or GitHub repo)
+- **Phone**: Optional
+
+**Privacy Policy** (Required!)
+- **Privacy policy URL**: You MUST provide a valid URL
+  - If you don't have one, use a privacy policy generator
+  - Recommended: [Privacy Policy Generator](https://www.privacypolicygenerator.info/)
+  - Or create a simple GitHub Gist with privacy policy
+  - Must explain how you collect/use data (analytics, ads, etc.)
+
+Click **"Save"** at the bottom
+
+#### 2.2 App Content (Required)
+
+Navigate to **Policy** → **App content** and complete ALL declarations:
+
+**Privacy Policy:**
+- Add your privacy policy URL (same as above)
+
+**Ads:**
+- Select **"Yes, my app contains ads"** (since you're using AdMob)
+
+**App Access:**
+- If all features are accessible: Select **"All or some functionality is restricted"** → No
+- Or describe any login requirements
+
+**Content Ratings:**
+1. Click **"Start questionnaire"**
+2. Enter your email
+3. Select category: **"Games"**
+4. Answer questions honestly (for this game, all answers should be "No")
+   - No violence, sexual content, language, controlled substances, etc.
+5. Submit - you'll get a rating (likely ESRB: Everyone, PEGI: 3)
+
+**Target Audience:**
+1. Click **"Start"**
+2. Select target age groups: Check **"Ages 13 and older"** or appropriate age
+3. Is your app designed specifically for children? **No**
+4. Appeal to children? **No** (unless specifically designed for kids)
+5. Save
+
+**News Apps:**
+- Select **"No"** (this is not a news app)
+
+**Data Safety:**
+1. Click **"Start"**
+2. **Does your app collect or share user data?** 
+   - Select **"Yes"** (AdMob collects data)
+3. **Data collection and security:**
+   - Add: **Device or other IDs** (collected by AdMob)
+   - Purpose: **Advertising or marketing**
+   - Collection: **Optional** (if users can disable personalization)
+   - Encrypted in transit: **Yes**
+   - Users can request data deletion: **Yes** (add instructions)
+4. Review and submit
+
+**Government Apps:**
+- Select **"No"** (unless it is)
+
+**Financial Features:**
+- Select **"No"** (in-app purchases don't count here)
+
+**Health:**
+- Select **"No"** (unless tracking health data)
+
+### Step 3: Select Countries and Regions
+
+Navigate to **Policy** → **App availability** → **Countries/Regions**
+
+1. Click **"Add countries/regions"**
+2. For worldwide distribution: Click **"Select all countries"**
+3. Or manually select specific countries
+4. Click **"Add countries"**
+5. Save
+
+### Step 4: Set Up Pricing (if applicable)
+
+Navigate to **Policy** → **App pricing**
+
+- Since your app is free with in-app purchases:
+  1. Confirm **"Free"** is selected
+  2. Distributed apps: Available in selected countries
+  3. Save
+
+### Step 5: Create Production Release (Initial Setup)
+
+Navigate to **Release** → **Production** → **Create new release**
+
+**⚠️ IMPORTANT: You need a signed AAB file first!**
+
+Before you can create a release, you need to:
+1. Build your production AAB (see "Production Build" section)
+2. Sign the AAB with your keystore
+3. Return here to upload
+
+**For now, save this step for later** - you'll come back after building your AAB.
+
+### Step 6: Set Up App Signing
+
+Navigate to **Release** → **Setup** → **App integrity** → **App signing**
+
+1. **Enroll in Play App Signing** (Recommended)
+   - Google manages your app signing key
+   - You upload an upload key instead
+   - More secure and Google handles key management
+   - Click **"Continue"** to accept terms
+
+2. **Download certificates** (keep these safe!)
+   - Download your upload certificate
+   - Store securely - you'll need it for future builds
+
+### Common Issues and How to Avoid Them
+
+**❌ REJECTION REASONS TO AVOID:**
+
+1. **Missing Privacy Policy**
+   - ALWAYS provide a valid, accessible privacy policy URL
+   - Must explain data collection (ads, analytics)
+
+2. **Incorrect Age Rating**
+   - Answer content rating questions honestly
+   - For this game: No violence, no mature content
+
+3. **Misleading Store Listing**
+   - Screenshots must show actual gameplay
+   - Description must accurately describe the app
+   - Don't use copyrighted images or misleading claims
+
+4. **Intellectual Property Violations**
+   - Don't use copyrighted images, names, or trademarks
+   - "Green Tap Reflex" is generic enough, but be careful with branding
+
+5. **Dangerous Permissions**
+   - Only request permissions you actually need
+   - Your app should only need: INTERNET, ACCESS_NETWORK_STATE
+
+6. **Malicious Behavior**
+   - Don't collect unnecessary data
+   - Be transparent about ads and data collection
+
+**✅ CHECKLIST BEFORE SUBMITTING:**
+
+- [ ] Store listing complete with description, icon, screenshots
+- [ ] Privacy policy URL provided and accessible
+- [ ] Content rating questionnaire completed
+- [ ] Data safety form filled out (mention AdMob data collection)
+- [ ] App uses correct package name: `com.mchisty.greentapreflex`
+- [ ] All graphics meet size requirements
+- [ ] Contact email is valid and monitored
+- [ ] Target audience selected appropriately
+- [ ] Countries/regions selected
+- [ ] Test the app thoroughly on multiple devices
+
+### Expected Timeline
+
+- **Account verification**: 24-48 hours after registration
+- **First app review**: Can take 7-14 days (sometimes longer)
+- **Subsequent updates**: Usually 1-3 days
+
+### After App Creation
+
+Once your app is created in Play Console, you can proceed with:
+1. Configuring in-app purchases (next section)
+2. Setting up AdMob integration
+3. Building and uploading your production AAB
+4. Submitting for review
+
+---
+
 ## 💰 Configure In-App Purchases (Google Play Billing)
 
 **IMPORTANT**: The current implementation is a placeholder that uses local storage. For production, you MUST implement real Google Play Billing with server-side receipt validation.
 
+**PREREQUISITE**: Your app must be created in Google Play Console (see section above)
+
 ### 1. Create In-App Product in Play Console
 
 1. Go to [Google Play Console](https://play.google.com/console/)
-2. Select your app (or create new app if first time)
-3. Navigate to **Monetize** → **In-app products**
+2. **Select your app** from the dashboard (the app you created in the previous section)
+3. Navigate to **Monetize** → **Products** → **In-app products**
 4. Click **Create product**
 5. Configure the product:
    - **Product ID**: `remove_ads` (must match PRODUCT_ID in code)
